@@ -14,7 +14,7 @@ export type TodoState = { todos: Todo[] };
 
 export const initialTodoState: TodoState = { todos: [] };
 
-enum TODO_ACTION_KIND {
+export enum TODO_ACTION_KIND {
   ADD = "ADD",
   DELETE = "DELETE",
   UPDATE = "UPDATE"
