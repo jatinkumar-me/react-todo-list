@@ -31,7 +31,7 @@ export default function TodoForm({ todo, onCancel }: PropTypes) {
   const isEditForm: boolean = typeof todo !== "undefined";
   const [title, setTitle] = useState(todo?.title ?? "");
   const [description, setDescription] = useState(todo?.description ?? "");
-  const [dueDate, setDueDate] = useState(todo?.dueDate ?? new Date());
+  const [dueDate, setDueDate] = useState(todo?.dueDate ?? undefined);
   const [priority, setPriority] = useState(todo?.priority ?? "normal");
   const canSave: boolean = title.length > 0;
 

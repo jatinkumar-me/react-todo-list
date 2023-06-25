@@ -19,6 +19,7 @@ const Search = styled("div")(({ theme }) => ({
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
+  border: "2px solid #a3a3a3",
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(3),
@@ -56,7 +57,6 @@ export default function Navbar() {
 
   useEffect(() => {
     setSearchTerm(currentSearchTerm);
-    console.log("debounced changed", debouncedValue);
   }, [debouncedValue]);
 
   return (
