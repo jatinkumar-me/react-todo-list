@@ -1,13 +1,27 @@
-import { Box, Checkbox, Divider, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  IconButton,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import {
   TODO_ACTION_KIND,
   Todo,
   TodoDispatchContext,
 } from "../context/TodoProvider";
 import { timeAgo } from "../utils/TimeAgo";
-import { CalendarMonthOutlined, Delete, Edit, Flag } from "@mui/icons-material";
+import {
+  CalendarMonthOutlined,
+  Close,
+  Delete,
+  Edit,
+  Flag,
+} from "@mui/icons-material";
 import { format } from "date-fns";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TodoForm from "./TodoForm";
 import FlexBetween from "./FlexBetween";
 
@@ -16,16 +30,37 @@ type PropType = {
 };
 
 function getFlagColor(priority: Todo["priority"]) {
-  switch(priority) {
-    case "critical": return "error";
-    case "normal": return "primary";
-    case "low": return "inherit";
+  switch (priority) {
+    case "critical":
+      return "error";
+    case "normal":
+      return "primary";
+    case "low":
+      return "inherit";
   }
 }
 
 export default function TodoComponent({ todo }: PropType) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const dispatch = useContext(TodoDispatchContext);
+  const [open, setOpen] = useState(false);
+  let timeout: number;
+
+  const handleClick = () => {
+    if (!isChecked) setOpen(true);
+    setIsChecked(true);
+  };
+
+  const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    } else if (reason === "undo") {
+      clearTimeout(timeout);
+      setIsChecked(false);
+    }
+    setOpen(false);
+  };
 
   function handleDelete() {
     dispatch({ type: TODO_ACTION_KIND.DELETE, payload: todo });
@@ -34,6 +69,29 @@ export default function TodoComponent({ todo }: PropType) {
   function handleEdit() {
     setIsEditing(!isEditing);
   }
+
+  const action = (
+    <>
+      <Button color="primary" size="small" onClick={(e) => handleClose(e, "undo")}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <Close fontSize="small" />
+      </IconButton>
+    </>
+  );
+
+  useEffect(() => {
+    if (isChecked) {
+      timeout = setTimeout(() => handleDelete(), 3000);
+    }
+    return () => clearTimeout(timeout);
+  }, [isChecked]);
 
   if (isEditing) return <TodoForm todo={todo} onCancel={handleEdit} />;
 
@@ -51,7 +109,14 @@ export default function TodoComponent({ todo }: PropType) {
           },
         }}
       >
-        <Checkbox />
+        <Checkbox checked={isChecked} onChange={handleClick} />
+        <Snackbar
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          message="One todo completed successfully"
+          action={action}
+        />
         <Box flexGrow={1}>
           <Box
             display={"flex"}
