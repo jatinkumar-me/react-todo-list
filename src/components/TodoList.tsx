@@ -1,10 +1,13 @@
 import { useContext } from "react";
-import { TODO_ACTION_KIND, TodoDispatchContext, TodoStateContext } from "../context/TodoProvider";
-import { Button, Container } from "@mui/material";
+import {
+  TODO_ACTION_KIND,
+  TodoDispatchContext,
+  TodoStateContext,
+} from "../context/TodoProvider";
+import { Box, Button, Container } from "@mui/material";
 import TodoComponent from "./Todo";
 
 export default function TodoList() {
-
   const { todos } = useContext(TodoStateContext);
   const dispatch = useContext(TodoDispatchContext);
 
@@ -15,16 +18,20 @@ export default function TodoList() {
         id: "2332432",
         title: "jatin",
         dateCreated: new Date(),
+        dueDate: new Date(),
         description: "new descritipn",
-        priority: "low"
-      }
-    })
+        priority: "low",
+      },
+    });
   }
-  return <Container>
-    {todos.map((todo) =>
-      <TodoComponent key={todo.id} todo={todo}/>
-    )}
-    <Button onClick={handleClick}>Click to add</Button>
-  </Container>
+  return (
+    <Container maxWidth="md">
+      <Box>
+        {todos.map((todo) => (
+          <TodoComponent key={todo.id} todo={todo} />
+        ))}
+      </Box>
+      <Button onClick={handleClick}>Click to add</Button>
+    </Container>
+  );
 }
-

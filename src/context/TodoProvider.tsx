@@ -1,13 +1,12 @@
 import { createContext, useReducer, ReactElement } from "react";
 
 export type Todo = {
-  id: string,
-  title: string,
-  description?: string,
-  dateCreated: Date,
-  dueDate?: Date,
-  priority: "critical" | "normal" | "low",
-  labels?: string[]
+  id: string;
+  title: string;
+  description?: string;
+  dateCreated: Date;
+  dueDate?: Date;
+  priority: "critical" | "normal" | "low";
 };
 
 export type TodoState = { todos: Todo[] };
@@ -17,20 +16,16 @@ export const initialTodoState: TodoState = { todos: [] };
 export enum TODO_ACTION_KIND {
   ADD = "ADD",
   DELETE = "DELETE",
-  UPDATE = "UPDATE"
+  UPDATE = "UPDATE",
 }
 
 export type TodoAction = {
-  type: TODO_ACTION_KIND,
-  payload: Todo
-}
+  type: TODO_ACTION_KIND;
+  payload: Todo;
+};
 
-const reducer = (
-  state: TodoState,
-  action: TodoAction
-): TodoState => {
+const reducer = (state: TodoState, action: TodoAction): TodoState => {
   switch (action.type) {
-
     case TODO_ACTION_KIND.ADD: {
       return { todos: [...state.todos, action.payload] };
     }
@@ -54,21 +49,25 @@ const reducer = (
 };
 
 /*
- * This is the preferred way to using React's context API along with useReducer Hook 
+ * This is the preferred way to using React's context API along with useReducer Hook
  * SEE:
- * https://www.nielskrijger.com/posts/2021-02-16/use-reducer-and-use-context 
-*/
+ * https://www.nielskrijger.com/posts/2021-02-16/use-reducer-and-use-context
+ */
 
 export const TodoStateContext = createContext<TodoState>(initialTodoState);
-export const TodoDispatchContext = createContext<React.Dispatch<TodoAction>>(() => { });
+export const TodoDispatchContext = createContext<React.Dispatch<TodoAction>>(
+  () => {}
+);
 
 type PropType = {
-  children?: ReactElement | ReactElement[],
-  initialTodoState: TodoState
-}
+  children?: ReactElement | ReactElement[];
+  initialTodoState: TodoState;
+};
 
-const TodoProvider = ({ children, initialTodoState }: PropType): ReactElement => {
-
+const TodoProvider = ({
+  children,
+  initialTodoState,
+}: PropType): ReactElement => {
   const [state, dispatch] = useReducer(reducer, initialTodoState);
 
   return (
@@ -77,7 +76,7 @@ const TodoProvider = ({ children, initialTodoState }: PropType): ReactElement =>
         {children}
       </TodoDispatchContext.Provider>
     </TodoStateContext.Provider>
-  )
-}
+  );
+};
 
 export default TodoProvider;
