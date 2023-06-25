@@ -8,7 +8,6 @@ import { Add } from "@mui/icons-material";
 
 function App() {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
 
   function handleClick() {
     setIsFormOpen(!isFormOpen);
@@ -16,7 +15,7 @@ function App() {
 
   return (
     <>
-      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Navbar />
       <Container maxWidth="md" sx={{ minHeight: "90vh" }}>
         <TodoList />
         {!isFormOpen ? (
