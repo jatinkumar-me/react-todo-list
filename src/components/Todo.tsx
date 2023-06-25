@@ -138,7 +138,7 @@ export default function TodoComponent({ todo }: PropType) {
             </Box>
           </Box>
           <Typography variant="body1">{todo.description}</Typography>
-          <FlexBetween>
+          <FlexBetween marginTop={"0.8rem"} color={"gray"}>
             <Box display={"flex"}>
               {todo.dueDate && (
                 <Box
