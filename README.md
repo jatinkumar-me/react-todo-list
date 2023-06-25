@@ -7,7 +7,7 @@ This is a Todo List application built with React JS and Material UI. It allows u
 - Add a new todo task.
 - List all tasks.
 - Delete and edit individual tasks.
-- Search for tasks by title.
+- Search for tasks by title. App implement debounced search query.
 - Sort tasks by due date, date created, or name.
 - Filter tasks by priority and label.
 
