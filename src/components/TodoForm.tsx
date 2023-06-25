@@ -87,6 +87,7 @@ export default function TodoForm({ todo, onCancel }: PropTypes) {
           size="small"
           variant="standard"
           autoFocus
+          required
           inputProps={{ style: { fontSize: 30 } }}
         />
         <TextField
@@ -100,7 +101,7 @@ export default function TodoForm({ todo, onCancel }: PropTypes) {
           size="small"
           variant="standard"
         />
-        <FlexBetween>
+        <FlexBetween flexWrap={"wrap"} gap={"0.5rem"}>
           <Box display={"flex"} alignItems={"center"} gap={"0.5rem"}>
             <FormControl>
               <InputLabel id="priority">Priority</InputLabel>
@@ -124,7 +125,7 @@ export default function TodoForm({ todo, onCancel }: PropTypes) {
                   <Flag color="primary" fontSize="small" />
                   Normal
                 </MenuItem>
-                <MenuItem value={"high"}>
+                <MenuItem value={"critical"}>
                   <Flag color="error" fontSize="small" />
                   Critical
                 </MenuItem>

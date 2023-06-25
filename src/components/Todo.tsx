@@ -5,18 +5,27 @@ import {
   TodoDispatchContext,
 } from "../context/TodoProvider";
 import { timeAgo } from "../utils/TimeAgo";
-import { CalendarMonthOutlined, Delete, Edit } from "@mui/icons-material";
+import { CalendarMonthOutlined, Delete, Edit, Flag } from "@mui/icons-material";
 import { format } from "date-fns";
 import { useContext, useState } from "react";
 import TodoForm from "./TodoForm";
+import FlexBetween from "./FlexBetween";
 
 type PropType = {
   todo: Todo;
 };
+
+function getFlagColor(priority: Todo["priority"]) {
+  switch(priority) {
+    case "critical": return "error";
+    case "normal": return "primary";
+    case "low": return "inherit";
+  }
+}
+
 export default function TodoComponent({ todo }: PropType) {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useContext(TodoDispatchContext);
-
 
   function handleDelete() {
     dispatch({ type: TODO_ACTION_KIND.DELETE, payload: todo });
@@ -26,7 +35,7 @@ export default function TodoComponent({ todo }: PropType) {
     setIsEditing(!isEditing);
   }
 
-  if (isEditing) return <TodoForm todo={todo} onCancel={handleEdit}/>;
+  if (isEditing) return <TodoForm todo={todo} onCancel={handleEdit} />;
 
   return (
     <Box display={"flex"} flexDirection={"column"}>
@@ -64,20 +73,28 @@ export default function TodoComponent({ todo }: PropType) {
             </Box>
           </Box>
           <Typography variant="body1">{todo.description}</Typography>
-          <Box display={"flex"} gap={"0.5rem"} alignItems={"center"}>
-            {todo.dueDate && (
-              <Box display={"inline-flex"} alignItems={"center"} gap={"0.2rem"}>
-                <CalendarMonthOutlined fontSize="small" />
-                <Typography variant="body2" mr={"0.2rem"}>
-                  {`${format(todo.dueDate, "d MMMM, eeee")}`}
-                </Typography>
-                <Divider orientation="vertical" flexItem />
-              </Box>
-            )}
+          <FlexBetween>
+            <Box display={"flex"}>
+              {todo.dueDate && (
+                <Box
+                  display={"inline-flex"}
+                  alignItems={"center"}
+                  gap={"0.2rem"}
+                >
+                  <CalendarMonthOutlined fontSize="small" />
+                  <Typography variant="body2" mr={"0.2rem"}>
+                    {`${format(todo.dueDate, "d MMMM, eeee")}`}
+                  </Typography>
+                  <Divider orientation="vertical" flexItem />
+                </Box>
+              )}
+              <Flag color={getFlagColor(todo.priority)} />
+              <Typography variant="body2">{todo.priority}</Typography>
+            </Box>
             <Typography variant="body2">
               {`Added ${timeAgo(todo.dateCreated)} ago`}
             </Typography>
-          </Box>
+          </FlexBetween>
         </Box>
       </Box>
       <Divider />

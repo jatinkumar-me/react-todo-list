@@ -6,6 +6,9 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { Checklist } from "@mui/icons-material";
+import { useContext, useEffect, useState } from "react";
+import { useDebounce } from "../hooks/useDebounce";
+import { SearchContext } from "../context/SearchProvider";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -46,12 +49,21 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function Navbar() {
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
+  const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm);
+  const debouncedValue = useDebounce<string>(currentSearchTerm, 500);
+
+  useEffect(() => {
+    setSearchTerm(currentSearchTerm);
+    console.log("debounced changed", debouncedValue);
+  }, [debouncedValue]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="inherit">
         <Toolbar>
-          <Checklist sx={{marginRight: "0.5rem"}}/>
+          <Checklist sx={{ marginRight: "0.5rem" }} />
           <Typography
             variant="h6"
             noWrap
@@ -67,6 +79,8 @@ export default function PrimarySearchAppBar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              value={currentSearchTerm}
+              onChange={(e) => setCurrentSearchTerm(e.target.value)}
             />
           </Search>
         </Toolbar>
