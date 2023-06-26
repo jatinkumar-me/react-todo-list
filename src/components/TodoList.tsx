@@ -20,12 +20,14 @@ type FilteringCriteria = Todo["priority"] | "all";
 
 export default function TodoList() {
   const { todos } = useContext(TodoStateContext);
+  const { searchTerm } = useContext(SearchContext);
+
   const [sortingCriteria, setSortingCriteria] =
     useState<SortingCriteria>("dateCreated");
   const [filteringCriteria, setFilteringCriteria] =
     useState<FilteringCriteria>("all");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { searchTerm } = useContext(SearchContext);
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -119,14 +121,14 @@ export default function TodoList() {
             if (filteringCriteria === "all") return true;
             return todo.priority === filteringCriteria;
           })
-          .sort((todoA, todoB) => {
+          .sort((firstTodo, secondTodo) => {
             switch (sortingCriteria) {
               case "dateCreated":
                 return (
-                  todoA.dateCreated.getTime() - todoB.dateCreated.getTime()
+                  firstTodo.dateCreated.getTime() - secondTodo.dateCreated.getTime()
                 );
               case "title":
-                return todoA.title.localeCompare(todoB.title);
+                return firstTodo.title.localeCompare(secondTodo.title);
             }
           })
           .map((todo) => (
