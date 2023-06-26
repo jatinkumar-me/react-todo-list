@@ -48,8 +48,14 @@ export default function TodoComponent({ todo }: PropType) {
   let timeout: number;
 
   const handleClick = () => {
-    if (!isChecked) setOpen(true);
-    setIsChecked(true);
+    if (!isChecked) {
+      setOpen(true);
+      setIsChecked(true);
+    } else {
+      clearTimeout(timeout);
+      setOpen(false);
+      setIsChecked(false);
+    }
   };
 
   const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
@@ -72,7 +78,11 @@ export default function TodoComponent({ todo }: PropType) {
 
   const action = (
     <>
-      <Button color="primary" size="small" onClick={(e) => handleClose(e, "undo")}>
+      <Button
+        color="primary"
+        size="small"
+        onClick={(e) => handleClose(e, "undo")}
+      >
         UNDO
       </Button>
       <IconButton
